@@ -1,7 +1,8 @@
 name: itch_io
 description: Unofficial Itch.io REST API wrapper for the Dart Language.
 version: 1.0.0
-homepage: https://gihub.com/xenoken/itch-io
+homepage: https://github.com/xenoken/itch_io
+repository: https://github.com/xenoken/itch_io
 author: Kennedy Tochukwu Ekeoha <ekeohak@gmail.com>
 
 environment:
