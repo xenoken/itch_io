@@ -29,21 +29,13 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-class CredentialsInfo {
-  final int oauthApplicationId;
-  final List<String> scopes;
-  final String type;
+import 'itch_io_game.dart';
 
-  CredentialsInfo.fromJson(Map<String, dynamic> json)
-      : oauthApplicationId = json['oauth_application_id'],
-        scopes = json['scopes'].cast<String>(),
-        type = json['type'];
+class GameCollection {
+  final List<Game> games;
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['oauth_application_id'] = oauthApplicationId;
-    data['scopes'] = scopes;
-    data['type'] = type;
-    return data;
-  }
+  GameCollection(this.games);
+
+  @override
+  String toString() => games?.toString();
 }
