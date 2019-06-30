@@ -30,14 +30,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import 'itch_io_user_profile.dart';
+import 'itch_io_user.dart';
 
 class Game {
   final int id;
   final String title;
   final String url;
   final String coverUrl;
-  final UserProfile user;
+  final UserInfo user;
   final int purchasesCount;
   final int downloadsCount;
   final int viewsCount;
@@ -70,7 +70,7 @@ class Game {
         createdAt = json['created_at'],
         inPressSystem = json['in_press_system'],
         user = json['user'] != null
-            ? new UserProfile.fromJson(json['user'])
+            ? new UserInfo.fromJson(json['user'])
             : null,
         hasDemo = json['has_demo'],
         downloadsCount = json['downloads_count'],

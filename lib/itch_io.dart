@@ -36,4 +36,4 @@ export 'src/itch_io_client.dart';
 export 'src/itch_io_credentials_info.dart';
 export 'src/itch_io_game.dart';
 export 'src/itch_io_game_collection.dart';
-export 'src/itch_io_user_profile.dart';
+export 'src/itch_io_user.dart';

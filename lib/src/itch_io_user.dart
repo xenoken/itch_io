@@ -29,7 +29,26 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
 class UserProfile {
+  UserInfo info;
+
+  UserProfile({this.info});
+
+  UserProfile.fromJson(Map<String, dynamic> json) {
+    info = json['user'] != null ? new UserInfo.fromJson(json['user']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (info != null) {
+      data['user'] = info.toJson();
+    }
+    return data;
+  }
+}
+
+class UserInfo {
   final int id;
   final String username;
   final String displayName;
@@ -39,7 +58,7 @@ class UserProfile {
   final bool isDeveloper;
   final bool isPressUser;
 
-  UserProfile.fromJson(Map<String, dynamic> json)
+  UserInfo.fromJson(Map<String, dynamic> json)
       : isDeveloper = json['developer'],
         id = json['id'],
         url = json['url'],

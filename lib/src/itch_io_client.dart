@@ -34,10 +34,9 @@ import 'dart:convert';
 
 import 'itch_io_credentials_info.dart';
 import 'itch_io_endpoints.dart';
-import 'itch_io_game.dart';
 import 'itch_io_game_collection.dart';
 import 'itch_io_provider.dart';
-import 'itch_io_user_profile.dart';
+import 'itch_io_user.dart';
 
 class Client {
   final String _apiKey;
@@ -56,9 +55,7 @@ class Client {
 
         var decodedData = json.decode(data);
 
-        if (decodedData == null) return null;
-
-        return CredentialsInfo.fromJson(decodedData);
+        return decodedData ?? CredentialsInfo.fromJson(decodedData);
       });
 
   /// Fetches public profile data for the user to which
@@ -71,9 +68,7 @@ class Client {
 
         if (decodedData == null) return null;
 
-        decodedData = decodedData['user'];
-
-        return UserProfile.fromJson(decodedData);
+        return decodedData ?? UserProfile.fromJson(decodedData);
       });
 
   /// Fetches data about all the games you've uploaded or
@@ -84,20 +79,6 @@ class Client {
 
         var decodedData = json.decode(data);
 
-        if (decodedData == null) return null;
-
-        decodedData = decodedData['games'];
-
-        if (decodedData == null) return null;
-
-        var _games = <Game>[];
-        for (var gameData in decodedData) {
-          var _game = Game.fromJson(gameData);
-          if (_game != null) {
-            _games.add(_game);
-          }
-        }
-
-        return GameCollection(_games);
+        return decodedData ?? GameCollection.fromJson(decodedData);
       });
 }

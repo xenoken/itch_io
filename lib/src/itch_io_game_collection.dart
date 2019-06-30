@@ -32,10 +32,24 @@
 import 'itch_io_game.dart';
 
 class GameCollection {
-  final List<Game> games;
+  List<Game> games;
 
-  GameCollection(this.games);
+  GameCollection({this.games});
 
-  @override
-  String toString() => games?.toString();
+  GameCollection.fromJson(Map<String, dynamic> json) {
+    if (json['games'] != null) {
+      games = <Game>[];
+      json['games'].forEach((v) {
+        games.add(new Game.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (games != null) {
+      data['games'] = games.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 }
