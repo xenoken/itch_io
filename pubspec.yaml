@@ -1,9 +1,9 @@
-name: itch_io_lib
-description: Unofficial Itch.io REST API wrapper for the Dart Language.
-version: 1.0.1
+name: itch_io
+description: Unofficial itch.io REST API wrapper for the Dart Language. Supports credentials, user's profile info and games.
+version: 2.0.0
 homepage: https://github.com/xenoken/itch_io
 repository: https://github.com/xenoken/itch_io
-author: Kennedy Tochukwu Ekeoha <ekeohak@gmail.com>
+author: Ken Ekeoha <ekeohak@gmail.com>
 
 environment:
   sdk: '>=2.2.0 <3.0.0'

@@ -30,7 +30,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import 'itch_io_user.dart';
+import 'itch_io_game_earnings.dart';
+import 'itch_io_user_profile.dart';
 
 class Game {
   final int id;
@@ -55,6 +56,7 @@ class Game {
   final String classification;
   final String shortText;
   final String type;
+  final List<GameEarnings> earnings;
 
   Game.fromJson(Map<String, dynamic> json)
       : purchasesCount = json['purchases_count'],
@@ -69,9 +71,8 @@ class Game {
         pLinux = json['p_linux'],
         createdAt = json['created_at'],
         inPressSystem = json['in_press_system'],
-        user = json['user'] != null
-            ? new UserInfo.fromJson(json['user'])
-            : null,
+        user =
+            json['user'] != null ? new UserInfo.fromJson(json['user']) : null,
         hasDemo = json['has_demo'],
         downloadsCount = json['downloads_count'],
         title = json['title'],
@@ -80,7 +81,13 @@ class Game {
         minPrice = json['min_price'],
         classification = json['classification'],
         shortText = json['short_text'],
-        type = json['type'];
+        type = json['type'],
+        earnings = (json['earnings'] != null)
+            ? json['earnings']
+                .map((item) => GameEarnings.fromJson(item))
+                .toList()
+                .cast<GameEarnings>()
+            : null;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -108,6 +115,10 @@ class Game {
     data['classification'] = classification;
     data['short_text'] = shortText;
     data['type'] = type;
+    if (earnings != null) {
+      data['earnings'] = earnings.map((v) => v.toJson()).toList();
+    }
+
     return data;
   }
 }

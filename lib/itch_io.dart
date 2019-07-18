@@ -35,5 +35,6 @@ library itch_io;
 export 'src/itch_io_client.dart';
 export 'src/itch_io_credentials_info.dart';
 export 'src/itch_io_game.dart';
-export 'src/itch_io_game_collection.dart';
-export 'src/itch_io_user.dart';
+export 'src/itch_io_game_earnings.dart';
+export 'src/itch_io_user_games.dart';
+export 'src/itch_io_user_profile.dart';

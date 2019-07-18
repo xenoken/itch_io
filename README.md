@@ -1,3 +1,6 @@
+## Info
+
+Unofficial wrapper of itch.io REST API for the Dart Language.
 
 ## Usage
 

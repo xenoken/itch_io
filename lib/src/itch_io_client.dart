@@ -31,12 +31,14 @@
  */
 
 import 'dart:convert';
+import 'dart:core';
 
 import 'itch_io_credentials_info.dart';
 import 'itch_io_endpoints.dart';
-import 'itch_io_game_collection.dart';
+import 'itch_io_errors.dart';
 import 'itch_io_provider.dart';
-import 'itch_io_user.dart';
+import 'itch_io_user_games.dart';
+import 'itch_io_user_profile.dart';
 
 class Client {
   final String _apiKey;
@@ -48,37 +50,137 @@ class Client {
   /// In particular, the response includes
   /// the list of scopes the credentials give access to,
   /// and if it’s a JWT token, the expiration date
-  Future<CredentialsInfo> getCredentialsInfo() async =>
-      Future.microtask(() async {
-        var data = await Provider.getData(
-            Uri.parse(Endpoints.credentialsInfo(_apiKey)));
+  Future<CredentialsInfoResult> getCredentialsInfo() async {
+    var endpoint = Endpoints.credentialsInfo(_apiKey);
 
-        var decodedData = json.decode(data);
+    var data;
+    try {
+      data = await Provider.getData(Uri.parse(endpoint));
+    } catch (ex) {
+      // invalid json
+      return CredentialsInfoResult(
+          success: false,
+          info: null,
+          error: ItchioError(errors: [ItchioError.networkError]));
+    }
+    Map<String, dynamic> decodedData;
 
-        return decodedData ?? CredentialsInfo.fromJson(decodedData);
-      });
+    try {
+      decodedData = json.decode(data);
+    } on FormatException catch (ex) {
+      // invalid json
+      return CredentialsInfoResult(
+          success: false,
+          info: null,
+          error: ItchioError(errors: [ItchioError.invalidJson]));
+    }
+
+    try {
+      var info = CredentialsInfo.fromJson(decodedData);
+      return CredentialsInfoResult(success: true, info: info, error: null);
+    } catch (e) {
+      try {
+        var err = ItchioError.fromJson(decodedData);
+        return CredentialsInfoResult(
+            success: false, info: null, error: err); // invalid key probably
+      } catch (ex) {
+        // it is json but it is neither a Credentials or
+        // a Itchio Error... strange...
+        return CredentialsInfoResult(
+            success: false,
+            info: null,
+            error: ItchioError(errors: [ItchioError.unknown]));
+      }
+    }
+  }
 
   /// Fetches public profile data for the user to which
   /// the API key belongs.
-  Future<UserProfile> getUserProfile() async => Future.microtask(() async {
-        var data =
-            await Provider.getData(Uri.parse(Endpoints.userProfile(_apiKey)));
+  Future<UserProfileResult> getUserProfile() async {
+    var endpoint = Endpoints.userProfile(_apiKey);
 
-        var decodedData = json.decode(data);
+    var data;
+    try {
+      data = await Provider.getData(Uri.parse(endpoint));
+    } catch (ex) {
+      // invalid json
+      return UserProfileResult(
+          success: false,
+          user: null,
+          error: ItchioError(errors: [ItchioError.networkError]));
+    }
+    Map<String, dynamic> decodedData;
 
-        if (decodedData == null) return null;
+    try {
+      decodedData = json.decode(data);
+    } on FormatException catch (ex) {
+      // invalid json
+      return UserProfileResult(
+          success: false,
+          user: null,
+          error: ItchioError(errors: [ItchioError.invalidJson]));
+    }
 
-        return decodedData ?? UserProfile.fromJson(decodedData);
-      });
+    try {
+      var user = UserProfile.fromJson(decodedData);
+      return UserProfileResult(success: true, user: user, error: null);
+    } catch (e) {
+      try {
+        var err = ItchioError.fromJson(decodedData);
+        return UserProfileResult(success: false, user: null, error: err);
+      } catch (ex) {
+        // it is json but it is neither an object or
+        // a Itchio Error... strange...
+        return UserProfileResult(
+            success: false,
+            user: null,
+            error: ItchioError(errors: [ItchioError.unknown]));
+      }
+    }
+  }
 
   /// Fetches data about all the games you've uploaded or
   /// have edit access to.
-  Future<GameCollection> getUserGames() async => Future.microtask(() async {
-        var data =
-            await Provider.getData(Uri.parse(Endpoints.userGames(_apiKey)));
+  Future<UserGamesResult> getUserGames() async {
+    var endpoint = Endpoints.userGames(_apiKey);
 
-        var decodedData = json.decode(data);
+    var data;
+    try {
+      data = await Provider.getData(Uri.parse(endpoint));
+    } catch (ex) {
+      // invalid json
+      return UserGamesResult(
+          success: false,
+          games: null,
+          error: ItchioError(errors: [ItchioError.networkError]));
+    }
+    Map<String, dynamic> decodedData;
 
-        return decodedData ?? GameCollection.fromJson(decodedData);
-      });
+    try {
+      decodedData = json.decode(data);
+    } on FormatException catch (ex) {
+      // invalid json
+      return UserGamesResult(
+          success: false,
+          games: null,
+          error: ItchioError(errors: [ItchioError.invalidJson]));
+    }
+
+    try {
+      var games = UserGames.fromJson(decodedData);
+      return UserGamesResult(success: true, games: games, error: null);
+    } catch (e) {
+      try {
+        var err = ItchioError.fromJson(decodedData);
+        return UserGamesResult(success: false, games: null, error: err);
+      } catch (ex) {
+        // it is json but it is neither an object or
+        // a Itchio Error... strange...
+        return UserGamesResult(
+            success: false,
+            games: null,
+            error: ItchioError(errors: [ItchioError.unknown]));
+      }
+    }
+  }
 }

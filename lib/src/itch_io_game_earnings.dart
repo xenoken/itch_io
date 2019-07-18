@@ -30,54 +30,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-class UserProfile {
-  UserInfo info;
+class GameEarnings {
+  String currency;
+  String amountFormatted;
+  int amount;
 
-  UserProfile({this.info});
+  GameEarnings({this.currency, this.amountFormatted, this.amount});
 
-  UserProfile.fromJson(Map<String, dynamic> json) {
-    info = json['user'] != null ? new UserInfo.fromJson(json['user']) : null;
+  GameEarnings.fromJson(Map<String, dynamic> json) {
+    currency = json['currency'];
+    amountFormatted = json['amount_formatted'];
+    amount = json['amount'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (info != null) {
-      data['user'] = info.toJson();
-    }
-    return data;
-  }
-}
-
-class UserInfo {
-  final int id;
-  final String username;
-  final String displayName;
-  final String url;
-  final String coverUrl;
-  final bool isGamer;
-  final bool isDeveloper;
-  final bool isPressUser;
-
-  UserInfo.fromJson(Map<String, dynamic> json)
-      : isDeveloper = json['developer'],
-        id = json['id'],
-        url = json['url'],
-        coverUrl = json['cover_url'],
-        isGamer = json['gamer'],
-        username = json['username'],
-        displayName = json['display_name'],
-        isPressUser = json['press_user'];
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['developer'] = isDeveloper;
-    data['id'] = id;
-    data['url'] = url;
-    data['cover_url'] = coverUrl;
-    data['gamer'] = isGamer;
-    data['username'] = username;
-    data['display_name'] = displayName;
-    data['press_user'] = isPressUser;
+    data['currency'] = currency;
+    data['amount_formatted'] = amountFormatted;
+    data['amount'] = amount;
     return data;
   }
 }

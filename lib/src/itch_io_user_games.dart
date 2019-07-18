@@ -29,17 +29,34 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+import 'itch_io_errors.dart';
+import 'itch_io_game.dart';
 
-import 'dart:convert';
-import 'dart:io';
+class UserGamesResult {
+  final bool success;
+  final UserGames games;
+  final ItchioError error;
 
-abstract class Provider {
-  static Future<String> getData(Uri uri) async {
-    HttpClient client = HttpClient();
-    return client.getUrl(uri).then((request) => request.close()).then(
-        (response) => response
-            .transform(utf8.decoder)
-            .transform(const LineSplitter())
-            .single);
+  UserGamesResult({this.success, this.games, this.error});
+}
+
+class UserGames {
+  List<Game> games;
+
+  UserGames({this.games});
+
+  UserGames.fromJson(Map<String, dynamic> json) {
+    games = <Game>[];
+    json['games'].forEach((v) {
+      games.add(new Game.fromJson(v));
+    });
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (games != null) {
+      data['games'] = games.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 }

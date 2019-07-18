@@ -30,16 +30,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import 'dart:convert';
-import 'dart:io';
+library errors;
 
-abstract class Provider {
-  static Future<String> getData(Uri uri) async {
-    HttpClient client = HttpClient();
-    return client.getUrl(uri).then((request) => request.close()).then(
-        (response) => response
-            .transform(utf8.decoder)
-            .transform(const LineSplitter())
-            .single);
+class ItchioError extends Error {
+  static const String unknown = 'unknown';
+  static const String invalidKey = 'invalid key';
+  static const String invalidJson = 'invalid json';
+  static const String invalidApiEndpoint = 'invalid api endpoint';
+  static const String networkError = 'network error';
+
+  List<String> errors;
+
+  bool get isInvalidToken => errors.contains(invalidKey);
+  bool get isInvalidApiEndpoint => errors.contains(invalidApiEndpoint);
+  bool get isInvalidJson => errors.contains(invalidJson);
+  bool get isUnknown => errors.contains(unknown);
+  bool get isNetworkError => errors.contains(networkError);
+
+  ItchioError({this.errors});
+
+  ItchioError.fromJson(Map<String, dynamic> json) {
+    errors = json['errors'].cast<String>();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['errors'] = errors;
+    return data;
   }
 }

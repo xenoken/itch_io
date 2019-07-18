@@ -29,27 +29,65 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import 'itch_io_game.dart';
 
-class GameCollection {
-  List<Game> games;
+import 'itch_io_errors.dart';
 
-  GameCollection({this.games});
+class UserProfileResult {
+  final bool success;
+  final UserProfile user;
+  final ItchioError error;
 
-  GameCollection.fromJson(Map<String, dynamic> json) {
-    if (json['games'] != null) {
-      games = <Game>[];
-      json['games'].forEach((v) {
-        games.add(new Game.fromJson(v));
-      });
-    }
+  UserProfileResult({this.success, this.user, this.error});
+}
+
+class UserProfile {
+  UserInfo info;
+
+  UserProfile({this.info});
+
+  UserProfile.fromJson(Map<String, dynamic> json) {
+    info = UserInfo.fromJson(json['user']);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (games != null) {
-      data['games'] = games.map((v) => v.toJson()).toList();
+    if (info != null) {
+      data['user'] = info.toJson();
     }
+    return data;
+  }
+}
+
+class UserInfo {
+  final int id;
+  final String username;
+  final String displayName;
+  final String url;
+  final String coverUrl;
+  final bool isGamer;
+  final bool isDeveloper;
+  final bool isPressUser;
+
+  UserInfo.fromJson(Map<String, dynamic> json)
+      : isDeveloper = json['developer'],
+        id = json['id'],
+        url = json['url'],
+        coverUrl = json['cover_url'],
+        isGamer = json['gamer'],
+        username = json['username'],
+        displayName = json['display_name'],
+        isPressUser = json['press_user'];
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['developer'] = isDeveloper;
+    data['id'] = id;
+    data['url'] = url;
+    data['cover_url'] = coverUrl;
+    data['gamer'] = isGamer;
+    data['username'] = username;
+    data['display_name'] = displayName;
+    data['press_user'] = isPressUser;
     return data;
   }
 }

@@ -29,6 +29,17 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
+import 'itch_io_errors.dart';
+
+class CredentialsInfoResult {
+  final bool success;
+  final CredentialsInfo info;
+  final ItchioError error;
+
+  CredentialsInfoResult({this.success, this.info, this.error});
+}
+
 class CredentialsInfo {
   final int oauthApplicationId;
   final List<String> scopes;

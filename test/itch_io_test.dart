@@ -44,17 +44,43 @@ void main() {
 
     test('getCredentialsInfo', () async {
       var result = await client.getCredentialsInfo();
-      expect(result != null, true);
+      expect(result != null && result.info != null, true);
     });
 
     test('getUserProfile', () async {
       var result = await client.getUserProfile();
-      expect(result != null, true);
+      expect(result != null && result.user != null, true);
     });
 
     test('getUserGames', () async {
       var result = await client.getUserGames();
-      expect(result != null, true);
+      expect(result != null && result.games != null, true);
+    });
+  });
+
+  group('Itch.IO REST API -INVALID TOKEN', () {
+    Client client;
+
+    setUp(() {
+      client = Client('invalid_token'); // the string was arbitrarily chosen.
+    });
+
+    test('getCredentialsInfo -invalidToken', () async {
+      var result = await client.getCredentialsInfo();
+      expect(result.error, isNotNull);
+      expect(result.success, isFalse);
+    });
+
+    test('getUserProfile -invalidToken', () async {
+      var result = await client.getUserProfile();
+      expect(result.error, isNotNull);
+      expect(result.success, isFalse);
+    });
+
+    test('getUserGames -invalidToken', () async {
+      var result = await client.getUserGames();
+      expect(result.error, isNotNull);
+      expect(result.success, isFalse);
     });
   });
 }
